@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword" content="">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          HTTP深入浅出之HTTP方法、静态服务器和RESTfulAPI.md - weite122 | 涂涂的博客
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/2019/02/18/HTTP深入浅出之HTTP方法、静态服务器和RESTfulAPI-md/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('/img/header_img/home-bg-2-dark.png')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#HTTP" title="HTTP">HTTP</a>
+                            
+                        </div>
+                        <h1>HTTP深入浅出之HTTP方法、静态服务器和RESTfulAPI.md</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by weite122 on
+                            2019-02-18
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Tutu Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h3><span id="常见http方法有哪些使用场景分别是什么">常见HTTP方法有哪些？使用场景分别是什么？</span></h3>
+<ul>
+<li>GET:获取资源
+<ul>
+<li>GET 方法用来请求访问已被 URI 识别的资源。 指定的资源经服务器<br>
+端解析后返回响应内容。</li>
+</ul>
+</li>
+<li>POST:传输实体主体
+<ul>
+<li>POST 方法用来传输实体的主体。</li>
+</ul>
+</li>
+<li>PUT:传输文件
+<ul>
+<li>PUT 方法用来传输文件。</li>
+</ul>
+</li>
+<li>HEAD:获得报文首部
+<ul>
+<li>HEAD 方法和 GET 方法一样， 只是不返回报文主体部分。</li>
+</ul>
+</li>
+<li>DELETE:删除文件
+<ul>
+<li>DELETE 方法用来删除文件， 是与 PUT 相反的方法。 DELETE 方法按<br>
+请求 URI 删除指定的资源。</li>
+</ul>
+</li>
+<li>OPTIONS:询问支持的方法
+<ul>
+<li>OPTIONS 方法用来查询针对请求 URI 指定的资源支持的方法。</li>
+</ul>
+</li>
+<li>TRACE:追踪路径
+<ul>
+<li>TRACE 方法是让 Web 服务器端将之前的请求通信环回给客户端的方<br>
+法。</li>
+</ul>
+</li>
+<li>CONNECT:要求用隧道协议连接代理
+<ul>
+<li>CONNECT 方法要求在与代理服务器通信时建立隧道， 实现用隧道协<br>
+议进行 TCP 通信。</li>
+</ul>
+</li>
+</ul>
+<h3><span id="get与post有什么区别">GET与POST有什么区别？</span></h3>
+<ol>
+<li>使用get请求的参数会拼装在URL上，以key=value用&amp;符号连接的形式提交数据。当我们输入http：<a href="//www.baidu.xn--com-t28f">//www.baidu.com时</a>，我们请求的参数只能写在URL里。而POST提交请求不是在URL，例如在form 表单，method=post提交请求，URL不会有请求的参数。</li>
+<li>传输内容大小不同，请求大量数据时，用GET请求会有限制，因为URL长度会有限制，POST不会限制。</li>
+<li>安全性能，用GET登录账号时，用户名密码会在URL上，别人看到就能获取，浏览器的历史记录也会保留，某些插件也能扫描到浏览器的历史记录，服务器的日志也会保留，即很容易被他人获取。</li>
+<li>get是获取，post 是传递。</li>
+</ol>
+<h3><span id="form表单支持哪些方法">Form表单支持哪些方法</span></h3>
+<ul>
+<li>form表单只支持 post 和get。</li>
+</ul>
+<h3><span id="什么是restful-api">什么是RESTful API？</span></h3>
+<ul>
+<li>REST – Representational State Transfer，英语的直译就是“表现层状态转移”。表现层就是资源，通过http协议实现客户端和服务器的交互，http协议是无状态协议，所以所有的状态都保存在服务器。而他们的交互会让数据和和状态发生变化，而变化就是建立在表现层上面的。RESTful API就是一套协议来规范多种形式的前端和同一个后台的交互方式.</li>
+<li>API一般有GET（读取），POST（新建），PUT（更新），PATCH（更新），DELETE（删除）</li>
+<li>PUT和POST区别是PUT修改传参，需包含全部参数，POST只需传递需要修改的参数</li>
+</ul>
+<h3><span id="http协议是什么有哪些特点">HTTP协议是什么？有哪些特点？</span></h3>
+<ul>
+<li>
+<p>HTTP协议是超文本传输协议。</p>
+<ul>
+<li>它用于客户端和服务端之间的通信。</li>
+<li>通过客户端发送请求，服务器回复请求并返回响应。</li>
+<li>HTTP是无状态协议，不对请求和响应间的通信状态保存</li>
+<li>使用URI定位资源</li>
+<li>使用GET，POST，DELETE，PUT，CONNECT，TRACE，HEAD，OPTIONS等方法通信</li>
+<li>可以持久链接，不用每次建立TCP。管线化发送请求</li>
+<li>使用Cookie进行状态管理</li>
+</ul>
+<ol>
+<li>
+<p><strong>基于B/S 模式，即客户/服务器模式</strong>。同时可以提供登陆认证和网间安全传输，例如HTTP下加入SSL层，可以提供安全的HTTPS服务。</p>
+</li>
+<li>
+<p><strong>通信开销小，简单快速，传输成本低</strong>。服务器请求某些一定的服务时，浏览者通常只需在请求报文中添加请求路径和方法。最一般的情形，例如GET、HEAD、POST等，这也是我们使用最多的。每一种请求方法都有自己的适用范围，在请求报文的内部，通过一些规则，说明了用户与Web服务器之间沟通的类型。同时，HTTP协议规则较为简单，因此使用HTTP服务器的系统，代码和程序规模都会比较轻量级，但是通信的速度却效率较高。</p>
+</li>
+<li>
+<p><strong>使用灵活</strong>：超文本协议，允许服务器和客户端传输任意类型或者任意数据结构的数据对象。而且，通过一个简单的头信息，例如将正在传输的类型由Content-Type加以标记，于是可以区分开。</p>
+</li>
+<li>
+<p><strong>节省传输时间</strong>：最初版本的HTTP协议使用非持续连接，只允许发送并处理一个连接，当请求响应完成，也就是服务器完成客户端的请求，同时收到了客户端浏览器的应答后，连接会立即断开。有了这种特点，通信方式节省了大量用于数据传输和等待应答的时间，时间成本变得非常小。同时，高版本HTTP协议，HTTP 1.1支持持续连接：多个对象可以通过一个连接可传送，不需要每次传输一个web对象就去创建一个新的连接。</p>
+</li>
+<li>
+<p><strong>可能影响传输效率，无状态</strong>：HTTP协议是无状态协议。无状态，如果协议对于事务处理没有记忆的机制，不能存储处理进度，此时，如果后续的操作需要前面的处理信息，就需要重新发送对象即必须重传，这样的后果是，可能多次连接才能完成操作，数据量会因此变大。“在服务器端，每个HTTP请求都要启动独立的线程去处理，减少Http请求的数目可以有效提高访问性能</p>
+</li>
+</ol>
+</li>
+</ul>
+<h3><span id="什么是非持久连接什么是持久连接">什么是非持久连接，什么是持久连接？</span></h3>
+<ul>
+<li>每进行一次HTTP通信就要断开TCP连接。</li>
+<li>任意一端没有提出断开连接，就要保持TCP连接。</li>
+</ul>
+<h3><span id="keep-alive-timeout5-max100是什么意思">Keep-Alive: timeout=5, max=100是什么意思？</span></h3>
+<ul>
+<li>timeout：过期时间5秒</li>
+<li>max：过了100秒，强制断掉连接</li>
+<li>就是在timeout时间内又有新的连接过来，同时max会自动减1，直到为0，强制断掉。</li>
+</ul>
+<h3><span id="一次完整的http请求所经历哪些步骤说说http协议的工作流程">一次完整的Http请求所经历哪些步骤？/说说Http协议的工作流程?</span></h3>
+<ul>
+<li>
+<p>HTTP通信机制是在一次完整的HTTP通信过程中，Web浏览器与Web服务器之间将完成下列7个步骤：</p>
+<ol>
+<li>
+<p>建立TCP连接<br>
+在HTTP工作开始之前，Web浏览器首先要通过网络与Web服务器建立连接，该连接是通过TCP来完成的，该协议与IP协议共同构建Internet，即著名的TCP/IP协议族，因此Internet又被称作是TCP/IP网络。HTTP是比TCP更高层次的应用层协议，根据规则，只有低层协议建立之后才能进行更高层协议的连接，因此，首先要建立TCP连接，一般TCP连接的端口号是80。</p>
+</li>
+<li>
+<p>Web浏览器向Web服务器发送请求命令<br>
+一旦建立了TCP连接，Web浏览器就会向Web服务器发送请求命令。例如：GET/sample/hello.jsp HTTP/1.1。</p>
+</li>
+<li>
+<p>Web浏览器发送请求头信息<br>
+浏览器发送其请求命令之后，还要以头信息的形式向Web服务器发送一些别的信息，之后浏览器发送了一空白行来通知服务器，它已经结束了该头信息的发送。</p>
+</li>
+<li>
+<p>Web服务器应答<br>
+客户机向服务器发出请求后，服务器会客户机回送应答， HTTP/1.1 200 OK ，应答的第一部分是协议的版本号和应答状态码。</p>
+</li>
+<li>
+<p>Web服务器发送应答头信息<br>
+正如客户端会随同请求发送关于自身的信息一样，服务器也会随同应答向用户发送关于它自己的数据及被请求的文档。</p>
+</li>
+<li>
+<p>Web服务器向浏览器发送数据<br>
+Web服务器向浏览器发送头信息后，它会发送一个空白行来表示头信息的发送到此为结束，接着，它就以Content-Type应答头信息所描述的格式发送用户所请求的实际数据。</p>
+</li>
+<li>
+<p>Web服务器关闭TCP连接<br>
+一般情况下，一旦Web服务器向浏览器发送了请求数据，它就要关闭TCP连接，然后如果浏览器或者服务器在其头信息加入了这行代码：Connection:keep-alive</p>
+</li>
+</ol>
+<ul>
+<li>TCP连接在发送后将仍然保持打开状态，于是，浏览器可以继续通过相同的连接发送请求。保持连接节省了为每个请求建立新连接所需的时间，还节约了网络带宽。</li>
+</ul>
+</li>
+</ul>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2019/03/03/HTTP深入浅出之报文与状态码/" data-toggle="tooltip" data-placement="top" title="HTTP深入浅出之报文与状态码">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2019/02/11/HTTP深入浅出之网络模型与TCP协议/" data-toggle="tooltip" data-placement="top" title="HTTP深入浅出之网络模型与TCP协议">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                    <div class="comment">
+                        <div id="disqus_thread" class="disqus-thread"></div>
+                    </div>
+                
+                <!-- disqus comment end -->
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#null"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">常见HTTP方法有哪些？使用场景分别是什么？</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#null"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">GET与POST有什么区别？</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#null"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">Form表单支持哪些方法</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#null"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">什么是RESTful API？</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#null"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">HTTP协议是什么？有哪些特点？</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#null"><span class="toc-nav-number">6.</span> <span class="toc-nav-text">什么是非持久连接，什么是持久连接？</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#null"><span class="toc-nav-number">7.</span> <span class="toc-nav-text">Keep-Alive: timeout=5, max=100是什么意思？</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#null"><span class="toc-nav-number">8.</span> <span class="toc-nav-text">一次完整的Http请求所经历哪些步骤？/说说Http协议的工作流程?</span></a></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#HTTP" title="HTTP">HTTP</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="" target="_blank"></a></li>
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus embedded js code start (one page only need to embed once) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "your-disqus-ID";
+    var disqus_identifier = "http://yoursite.com/2019/02/18/HTTP深入浅出之HTTP方法、静态服务器和RESTfulAPI-md/";
+    var disqus_url = "http://yoursite.com/2019/02/18/HTTP深入浅出之HTTP方法、静态服务器和RESTfulAPI-md/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus embedded js code start end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'ℬ'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/weite122">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; weite122 2020 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    re-Ported by <a href="http://beantech.org">BeanTech</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=YenYuHsuan&repo=hexo-theme-beantech&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-XXXXXXXX-X';
+    var _gaDomain = 'yoursite';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

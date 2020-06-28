@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword" content="">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          HTTP知识总结 - weite122 | 涂涂的博客
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/2018/03/07/HTTP知识总结/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('/img/header_img/home-bg-2-dark.png')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#HTTP" title="HTTP">HTTP</a>
+                            
+                        </div>
+                        <h1>HTTP知识总结</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by weite122 on
+                            2018-03-07
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Tutu Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2><span id="osi-七层模型指什么">OSI 七层模型指什么?</span></h2>
+<ul>
+<li>OSI模型是开放式系统互联通信参考模型（英语：Open System Interconnection Reference Model，缩写为 OSI），简称为OSI模型（OSI model），它定义了网络互联的7层框架，也就是开放式系统互联参考模型。</li>
+</ul>
+<ul>
+<li>
+<p><strong>第1层 物理层(Physical Layer)</strong></p>
+<ul>
+<li>在局部局域网上传送帧，它负责管理电脑通信设备和网络媒体之间的互通。包括了针脚、电压、线缆规范、集线器、中继器、网卡、主机适配器等</li>
+</ul>
+</li>
+<li>
+<p><strong>第2层 数据链接层(Data Link Layer)</strong></p>
+<ul>
+<li>负责网络寻址、错误侦测和改错。当表头和表尾被加至数据包时，会形成了帧。数据链表头（DLH）是包含了物理地址和错误侦测及改错的方法。数据链表尾（DLT）是一串指示数据包末端的字符串。例如以太网、无线局域网（Wi-Fi）和通用分组无线服务（GPRS）等。</li>
+<li>分为两种子层：logic link control sublayer &amp; media access control sublayer</li>
+</ul>
+</li>
+<li>
+<p><strong>第3层 网络层(Network Layer)</strong></p>
+<ul>
+<li>决定数据的路径选择和转寄，将网络表头（NH）加至数据包，以形成分组。网络表头包含了网络数据。例如:互联网协议（IP）等。</li>
+</ul>
+</li>
+<li>
+<p><strong>第4层 传输层(Transport Layer)</strong></p>
+<ul>
+<li>把传输表头（TH）加至数据以形成数据包。传输表头包含了所使用的协议等发送信息。例如:传输控制协议义（TCP）等。</li>
+</ul>
+</li>
+<li>
+<p><strong>第5层 会话层(Session Layer)</strong></p>
+<ul>
+<li>负责在数据传输中设置和维护电脑网络中两台电脑之间的通信连接。</li>
+</ul>
+</li>
+<li>
+<p><strong>第6层 表达层(Presentation Layer)</strong></p>
+<ul>
+<li>把数据转换为能与接收者的系统格式兼容并适合传输的格式。</li>
+</ul>
+</li>
+<li>
+<p><strong>第7层 应用层(Application Layer)</strong></p>
+<ul>
+<li>提供为应用软件而设的界面，以设置与另一应用软件之间的通信。例如: HTTP，HTTPS，FTP，TELNET，SSH，SMTP，POP3等。</li>
+</ul>
+</li>
+</ul>
+<h2><span id="http-的工作原理是什么">HTTP 的工作原理是什么？</span></h2>
+<p>HTTP由请求和响应构成，是一个标准的客户端服务器模型（B/S）。HTTP协议永远都是客户端发起请求，服务器回送响应。<br>
+一次HTTP操作称为一个事务，其工作整个过程如下：</p>
+<ol>
+<li>地址解析</li>
+</ol>
+<ul>
+<li>用客户端浏览器从URL中分解出协议名、主机名、端口、对象路径等部分，需要域名系统DNS解析域名<code>localhost.com</code>,得主机的IP地址。</li>
+</ul>
+<ol start="2">
+<li>封装HTTP请求数据包</li>
+</ol>
+<ul>
+<li>把以上部分结合本机自己的信息，封装成一个HTTP请求数据包</li>
+</ul>
+<ol start="3">
+<li>封装成TCP包，建立TCP连接（TCP的三次握手）</li>
+</ol>
+<ul>
+<li>在HTTP工作开始之前，客户机（Web浏览器）首先要通过网络与服务器建立连接，HTTP是比TCP更高层次的应用层协议，根据规则，只有低层协议建立之后才能，才能进行更层协议的连接，因此，首先要建立TCP连接。</li>
+</ul>
+<ol start="4">
+<li>客户机发送请求命令</li>
+</ol>
+<ul>
+<li>建立连接后，客户机发送一个请求给服务器，请求方式的格式为：统一资源标识符（URL）、协议版本号，后边是MIME信息包括请求修饰符、客户机信息和可选内容。</li>
+</ul>
+<ol start="5">
+<li>服务器响应</li>
+</ol>
+<ul>
+<li>服务器接到请求后，给予相应的响应信息，其格式为一个状态行，包括信息的协议版本号、一个成功或错误的代码，后边是MIME信息包括服务器信息、实体信息和可能的内容。实体消息是服务器向浏览器发送头信息后，它会发送一个空白行来表示头信息的发送到此为结束，接着，它就以Content-Type应答头信息所描述的格式发送用户所请求的实际数据</li>
+</ul>
+<ol start="6">
+<li>服务器关闭TCP连接（TCP的四次挥手）</li>
+</ol>
+<ul>
+<li>
+<p>一般情况下，一旦Web服务器向浏览器发送了请求数据，它就要关闭TCP连接，然后如果浏览器或者服务器在其头信息加入了这行代码</p>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">Connection</span>:<span class="meta">keep</span>-alive</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>TCP连接在发送后将仍然保持打开状态，于是，浏览器可以继续通过相同的连接发送请求。保持连接节省了为每个请求建立新连接所需的时间，还节约了网络带宽。</p>
+</li>
+</ul>
+<h2><span id="uri-的格式是什么常见的协议有哪些">URI 的格式是什么？常见的协议有哪些</span></h2>
+<ul>
+<li>
+<p>URI是采用一种特定语法标识一个资源的字符串，称之为“统一资源标识符”</p>
+</li>
+<li>
+<p>格式：协议//用户名:密码@授权机构:端口号/路径?查询字符串#哈希</p>
+</li>
+<li>
+<p>例如：<br>
+<a href="ftp://mp3:mp3@ci43198-a.ashvill.nc.home.com:33/VanHalen-Jump.mp3" target="_blank" rel="noopener">ftp://mp3:mp3@ci43198-a.ashvill.nc.home.com:33/VanHalen-Jump.mp3</a></p>
+</li>
+<li>
+<p>所有其他字符及内容中需用到的定界符也应用%转义（空格%20 /%2F）</p>
+</li>
+<li>
+<p>常见的几种协议：</p>
+<table>
+<thead>
+<tr>
+<th>协议</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data</td>
+<td>链接中直接包含的Base64编码数据</td>
+</tr>
+<tr>
+<td>file</td>
+<td>本地磁盘的文件</td>
+</tr>
+<tr>
+<td>ftp</td>
+<td>FTP服务器</td>
+</tr>
+<tr>
+<td>http</td>
+<td>使用超文本传输协议的国际互联网服务器</td>
+</tr>
+<tr>
+<td>mailto</td>
+<td>电子邮件地址</td>
+</tr>
+<tr>
+<td>magnet</td>
+<td>可以通过对等网络下载的资源</td>
+</tr>
+<tr>
+<td>telnet</td>
+<td>与基于Telnet的服务连接</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<h2><span id="http-协议有几种和服务器交互的方法">HTTP 协议有几种和服务器交互的方法</span></h2>
+<ul>
+<li>
+<p>GET</p>
+<ul>
+<li>
+<p>GET是最常用的方法，通常用于请求服务器发送某个资源</p>
+</li>
+<li>
+<p>我们平时在浏览器输入网页地址，就是给服务器发送了一个get请求，希望得到这个网页</p>
+</li>
+</ul>
+</li>
+<li>
+<p>HEAD</p>
+<ul>
+<li>
+<p>HEAD方法和GET类似，但是在服务器的响应中没有资源的内容，只有资源的一些基本信息，主要用于</p>
+<ol>
+<li>
+<p>在不获取资源的情况下获取资源信息（类型、大小等）</p>
+</li>
+<li>
+<p>通过状态码产看资源是否存在</p>
+</li>
+<li>
+<p>通过查看首部，测试资源是否被修改了</p>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>
+<p>PUT</p>
+<ul>
+<li>
+<p>和GET从服务器获取资源相反，PUT用于想服务器写入资源。PUT的语义就是让服务器用请求的主体部分创建一个请求URL命名的文档，如果存在就替换</p>
+</li>
+<li>
+<p>当然处于安全原因，并不是所有的服务器都实现，当然最近大热的RESTful API使它有了用武之地</p>
+</li>
+</ul>
+</li>
+<li>
+<p>POST</p>
+<ul>
+<li>POST用于想服务器发送数据，通常用来支持HTML的表单（input、select、textarea），表单中的数据会被发送到服务器</li>
+</ul>
+</li>
+<li>
+<p>TRACE</p>
+<ul>
+<li>
+<p>客户端发送一个请求的时候，这个请求可能会穿过防火墙、代理、网关和一些其它应用程序，没个中间节点都可能修改HTTP请求，TRACE方法允许客户端在最终请求发往服务器的时候，看看它变成了什么样子</p>
+</li>
+<li>
+<p>TRACE请求会在目的服务器端发送一个“闭环”诊断，行程最后一站服务器会弹回一条TRACE响应，并在响应主题中携带它收到的原始请求报文</p>
+</li>
+</ul>
+</li>
+<li>
+<p>DELETE</p>
+<ul>
+<li>DELETE方法用于要求服务器删除请求的URL，和PUT一样，服务器可能会不支持</li>
+</ul>
+</li>
+<li>
+<p>OPTIONS</p>
+<ul>
+<li>OPTIONS方法用于请求 web服务器告知其支持的各种功能</li>
+</ul>
+</li>
+</ul>
+<h2><span id="状态码200301304403-404-500503分别代表什么意思">状态码200，301，304，403, 404, 500，503分别代表什么意思</span></h2>
+<ol>
+<li>100-199 用于指定客户端应相应的某些动作。</li>
+<li>200-299 用于表示请求成功。</li>
+<li>300-399 用于已经移动的文件并且常被包含在定位头信息中指定新的地址信息。</li>
+<li>400-499 用于指出客户端的错误。</li>
+<li>500-599 用于支持服务器错误。</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>状态代码</th>
+<th>状态信息</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>200</td>
+<td>OK</td>
+<td>一切正常，对GET和POST请求的应答文档跟在后面。</td>
+</tr>
+<tr>
+<td>206</td>
+<td>Partial Content</td>
+<td>客户发送了一个带有Range头的GET请求，服务器完成了它（HTTP 1.1新）。</td>
+</tr>
+<tr>
+<td>301</td>
+<td>Moved Permanently</td>
+<td>客户请求的文档在其他地方，新的URL在Location头中给出，浏览器应该自动地访问新的URL。</td>
+</tr>
+<tr>
+<td>304</td>
+<td>Not Modified</td>
+<td>客户端有缓冲的文档并发出了一个条件性的请求（一般是提供If-Modified-Since头表示客户只想比指定日期更新的文档）。服务器告 诉客户，原来缓冲的文档还可以继续使用。</td>
+</tr>
+<tr>
+<td>403</td>
+<td>Forbidden</td>
+<td>资源不可用。服务器理解客户的请求，但拒绝处理它。通常由于服务器上文件或目录的权限设置导致。</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found</td>
+<td>无法找到指定位置的资源。这也是一个常用的应答。</td>
+</tr>
+<tr>
+<td>500</td>
+<td>Internal Server Error</td>
+<td>服务器遇到了意料不到的情况，不能完成客户的请求。</td>
+</tr>
+<tr>
+<td>503</td>
+<td>Service Unavailable</td>
+<td>服务器由于维护或者负载过重未能应答。例如，Servlet可能在数据库连接池已满的情况下返回503。服务器返回503时可以提供一个 Retry-After头。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><a href="http://book.jirengu.com/fe/%E4%B8%93%E9%A2%98%E6%89%A9%E5%B1%95/HTTP%E4%B8%93%E9%A2%98/status.html" target="_blank" rel="noopener">更多详见</a></li>
+</ul>
+<h2><span id="报文有哪几部分组成">报文有哪几部分组成？</span></h2>
+<ul>
+<li>HTTP报文是简单的格式化数据块，每个报文都包含一条来自客户端的请求或者一条来自服务器的响应，由3个部分组成</li>
+</ul>
+<ol>
+<li>对报文进行描述的起始行 —— start line</li>
+<li>包含属性的首部块 —— header</li>
+<li>可选的包含数据的主体部分 —— body</li>
+</ol>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.0 <span class="number">200</span> OK</span><br><span class="line"><span class="attribute">content-type</span>: text/plain</span><br><span class="line"><span class="attribute">content-length</span>: 19</span><br><span class="line"></span><br><span class="line">Hi, I'm a message</span><br></pre></td></tr></table></figure>
+<h2><span id="请求头的格式和作用是什么首部的作用是什么主体的作用是什么给个范例截图说明">请求头的格式和作用是什么？首部的作用是什么？主体的作用是什么？给个范例截图说明</span></h2>
+<p><img src="https://img1.zain.red/11.23/3.jpg" alt=""></p>
+<ul>
+<li>
+<p>HTTP首部规定了一个请求的约束和规则，以键值对的形式呈现。本例中的头部键值对分别表达了以下意思：</p>
+<ul>
+<li>Host: host_name 访问的宿主服务器是host_name</li>
+<li>Content-Type: text/xml 定义文件接收类型为text/xml格式接收</li>
+<li>Content-Length: 18 消息实体的传输长度，压缩后的message-body的长度为18字节</li>
+<li>If-Modified-Since: Sat, 02 May 2015 16:17:00 GMT 浏览器最后修改页面缓存的时间，可以让服务器与自己的数据更改时间进行比较</li>
+<li>If-None-Match: “03fb33c0bfcc” If-None-Match和ETag一起工作，工作原理是在HTTP Response中添加ETag信息。 当用户再次请求该资源时，将在HTTP Request 中加入If-None-Match信息(ETag的值)。如果服务器验证资源的ETag没有改变（该资源没有更新），将返回一个304状态告诉客户端使用本地缓存文件。否则将返回200状态和新的资源和Etag. 使用这样的机制将提高网站的性能</li>
+<li>Pragma: Public 指定了缓存的规则，本例子中的参数Public意味着可以被任何缓存所缓存</li>
+<li>Accept: text/html 浏览器端可以接受的媒体类型，本例中指定为html文档</li>
+<li>Accept-Encoding: gzip 指定了代码传输的压缩方式，本例中指定了gzip压缩方式</li>
+</ul>
+<p>请求主体的内容由传输者定义，传递了客户端到服务器的内容，其格式可以任意指定。本例中传递了两个键值对。</p>
+</li>
+</ul>
+<h2><span id="简述浏览器缓存是如何控制的">简述浏览器缓存是如何控制的</span></h2>
+<ul>
+<li>浏览器第一次请求a.jpg 时，服务器会发送完整的文件并附带额外信息，其中Etag 是 对a.jpg文件的编码，如果a.jpg在服务端未被修改，这个值就不会变</li>
+</ul>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Cache-Contro<span class="variable">l:</span> <span class="built_in">max</span>-age=<span class="number">300</span>；</span><br><span class="line">ETa<span class="variable">g:W</span>/<span class="string">"e-cbxLFQW5zapn79tQwb/g6Q"</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>浏览器把a.jpg和额外信息保存到本地。假如浏览器在300秒以内再次需要获取a.jpg时，浏览器直接从缓存读取a.jpg(200, from xx cache)。假如浏览器在300秒之后再次需要获取a.jpg时，浏览器发现该缓存的文件已经不新鲜了，于是就向服务器发送请求 重新获取a.jpg, 在发送请求的时候附带刚刚保存的a.jpg的ETag ( If-None-Match：W/“e-cbxLFQW5zapn79tQwb/g6Q”)。 服务器在接收到请求后拿浏览器请求的 Etag 和当前文件重新计算后端 Etag 做个比较，如果二者相等表示文件在未修改则发送个短消息（响应头，不包含图片内容, 304），如果二者不等则发送新文件和新的 ETag，浏览器获取新文件并更新该文件的 Etag。</p>
+</li>
+<li>
+<p>与 ETag 类似功能的是Last-Modified/If-Modified-Since。当资源过期时（max-age超时），发现资源具有Last-Modified声明，则再次向web服务器请求时带上头 If-Modified-Since，表示请求时间。web服务器收到请求后发现有头If-Modified-Since 则与被请求资源的最后修改时间进行比对。若最后修改时间较新，说明资源又被改动过，则响应整片资源内容（200）；若最后修改时间较旧，说明资源无新修改，则响应HTTP 304 ，告知浏览器继续使用所保存的cache。</p>
+</li>
+</ul>
+<h2><span id="下图各个参数是什么意思">下图各个参数是什么意思</span></h2>
+<p><a href="https://i.loli.net/2018/03/07/5a9fd48b48b84.jpg" target="_blank" rel="noopener"><img src="https://i.loli.net/2018/03/07/5a9fd48b48b84.jpg" alt="257149f7-1e11-4262-9b15-159389db83c6.jpg"></a></p>
+<ul>
+<li>请求的URL为http://note.rouyu.site/api/articles/56fe491293caf367f913d</li>
+<li>请求方法为PUT</li>
+<li>请求正常状态码为200</li>
+<li>请求远程地址（实际IP和端口）为：131.40.201.213:80</li>
+<li>请求TCP链接线路保持</li>
+<li>请求长度为12字节</li>
+<li>请求格式采用Json</li>
+<li>请求日期</li>
+<li>服务器采用nginx代理</li>
+<li>代理框架是Express</li>
+<li>请求的格式为任何格式</li>
+<li>编码接受gzip，deflate，sdch* 请求的URL为http://note.rouyu.site/api/articles/56fe491293caf367f913d</li>
+<li>请求方法为PUT</li>
+<li>请求正常状态码为200</li>
+<li>请求远程地址（实际IP和端口）为：131.40.201.213:80</li>
+<li>请求TCP链接线路保持</li>
+<li>请求长度为12字节</li>
+<li>请求格式采用Json</li>
+<li>请求日期</li>
+<li>服务器采用nginx代理</li>
+<li>代理框架是Express</li>
+<li>请求的格式为任何格式</li>
+<li>编码接受gzip，deflate，sdch</li>
+<li>语言接受中文，对中文喜好为0.8</li>
+<li>消息体长度为56字节</li>
+<li>请求格式为x-www-form-urlencode，charset=utf-8</li>
+<li>Cookie为客户端字符串，储存在本地的数据，辨别用户的身份加密字符串</li>
+<li>Hosts文件是一个用于储存计算机网络中各节点信息的计算机文件。这个文件负责将主机域名映射到相应的IP地址，此时的IP为note,ruoyu.site</li>
+<li>传输的主机和来源站点是note.ruoyu.site，从note.ruoyu.site链接过来</li>
+<li>传递信息的方式是Ajax。</li>
+<li>用户代理软件的应用类型、操作系统、软件开发商以及版本号。</li>
+<li>表单信息article: 若愚@饥人谷</li>
+</ul>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2018/08/19/vue学习笔记（一）/" data-toggle="tooltip" data-placement="top" title="vue学习笔记（一）">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2018/03/04/setTimeout/" data-toggle="tooltip" data-placement="top" title="setTimeout">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                    <div class="comment">
+                        <div id="disqus_thread" class="disqus-thread"></div>
+                    </div>
+                
+                <!-- disqus comment end -->
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#HTTP" title="HTTP">HTTP</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="" target="_blank"></a></li>
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus embedded js code start (one page only need to embed once) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "your-disqus-ID";
+    var disqus_identifier = "http://yoursite.com/2018/03/07/HTTP知识总结/";
+    var disqus_url = "http://yoursite.com/2018/03/07/HTTP知识总结/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus embedded js code start end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'ℬ'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/weite122">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; weite122 2020 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    re-Ported by <a href="http://beantech.org">BeanTech</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=YenYuHsuan&repo=hexo-theme-beantech&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-XXXXXXXX-X';
+    var _gaDomain = 'yoursite';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

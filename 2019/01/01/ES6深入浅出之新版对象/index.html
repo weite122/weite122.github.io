@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword" content="">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          ES6深入浅出之新版对象 - weite122 | 涂涂的博客
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/2019/01/01/ES6深入浅出之新版对象/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('/img/header_img/home-bg-2-dark.png')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#ES6" title="ES6">ES6</a>
+                            
+                        </div>
+                        <h1>ES6深入浅出之新版对象</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by weite122 on
+                            2019-01-01
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Tutu Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h3><span id="对象初始化">对象初始化</span></h3>
+<ul>
+<li>
+<p>新建一个空对象。可以通过<code>new Object()</code>， <code>Object.create()</code>方法，或者使用字面量标记（初始化标记）初始化对象。 一个对象初始化器，由花括号/大括号 ({}) 包含的一个由零个或多个对象属性名和其关联值组成的一个逗号分隔的列表构成。</p>
+  <figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">var</span> <span class="selector-tag">a</span> = new Object()<span class="comment">//有__proto__</span></span><br><span class="line"><span class="selector-tag">var</span> <span class="selector-tag">b</span> = Object.create(null)<span class="comment">//无__proto__</span></span><br><span class="line"><span class="selector-tag">var</span> c = Object.create(Object.prototype)<span class="comment">//有__proto__</span></span><br><span class="line"><span class="selector-tag">var</span> d = &#123;&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3><span id="属性访问">属性访问</span></h3>
+<ul>
+<li>
+<p>创建对象后，可以读取或者修改它。对象属性可以用下标小圆点标记或者方括号标记访问。</p>
+  <figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">var</span> name = <span class="string">"a"</span></span><br><span class="line"><span class="selector-tag">var</span> <span class="selector-tag">object</span> = &#123;&#125;</span><br><span class="line"><span class="selector-tag">object</span>[name] =<span class="number">1</span></span><br><span class="line"><span class="comment">// 可以缩写成object = &#123; [name]: 1 &#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3><span id="重复属性名">重复属性名</span></h3>
+<ul>
+<li>
+<p>属性使用了同样的名称时，后面的属性会覆盖前面的属性。</p>
+  <figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var a = &#123;<span class="string">x:</span> <span class="number">1</span>, <span class="string">x:</span> <span class="number">2</span>&#125;;</span><br><span class="line">console.log(a); <span class="comment">// &#123; x: 2&#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3><span id="方法定义">方法定义</span></h3>
+<ul>
+<li>对象属性也可以是一个<code>函数</code>、<code>getter</code>、<code>setter</code>方法。</li>
+</ul>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> o = &#123;</span><br><span class="line">  property: function ([parameters]) &#123;&#125;,</span><br><span class="line">  <span class="function"><span class="keyword">get</span> <span class="title">property</span>(<span class="params"></span>)</span> &#123;&#125;,</span><br><span class="line">  <span class="function"><span class="keyword">set</span> <span class="title">property</span>(<span class="params"><span class="keyword">value</span></span>)</span> &#123;&#125;,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> x = &#123;</span><br><span class="line">    _age: <span class="number">18</span>,</span><br><span class="line">    <span class="function"><span class="keyword">get</span> <span class="title">age</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> x._age</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="function"><span class="keyword">set</span> <span class="title">age</span>(<span class="params"><span class="keyword">value</span></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">value</span> &lt;<span class="number">100</span>)&#123;</span><br><span class="line">            x._age = <span class="keyword">value</span></span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            x._age = <span class="number">100</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>一道算法题 <code>a === 1 &amp;&amp; a===2 &amp;&amp; a ===3</code></li>
+</ul>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">var</span> <span class="selector-tag">i</span> = <span class="number">0</span></span><br><span class="line">Object.defineProperty(window, <span class="string">'a'</span>, &#123;</span><br><span class="line">    get()&#123;</span><br><span class="line">        i+=<span class="number">1</span></span><br><span class="line">        return i</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h3><span id="计算属性名">计算属性名</span></h3>
+<ul>
+<li>
+<p>允许在[]中放入表达式，计算结果可以当做属性名</p>
+  <figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> i = 0;</span><br><span class="line"><span class="keyword">var</span> a = &#123;</span><br><span class="line">[<span class="string">"foo"</span> + ++i]: i,</span><br><span class="line">[<span class="string">"foo"</span> + ++i]: i,</span><br><span class="line">[<span class="string">"foo"</span> + ++i]: <span class="built_in">i</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">console.<span class="built_in">log</span>(a.foo1); <span class="comment">// 1</span></span><br><span class="line">console.<span class="built_in">log</span>(a.foo2); <span class="comment">// 2</span></span><br><span class="line">console.<span class="built_in">log</span>(a.foo3); <span class="comment">// 3</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3><span id="扩展属性">扩展属性</span></h3>
+<ul>
+<li>
+<p>使用比<code>Object.assign()</code>更短的语法，可以轻松克隆（不包括原型）或合并对象。</p>
+  <figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">var</span> obj1 = &#123; foo: <span class="string">'bar'</span>, x: <span class="number">42</span> &#125;;</span><br><span class="line"><span class="built_in">var</span> obj2 = &#123; foo: <span class="string">'baz'</span>, y: <span class="number">13</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">var</span> clonedObj = &#123; <span class="params">...</span>obj1 &#125;;</span><br><span class="line"><span class="comment">// Object &#123; foo: "bar", x: 42 &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">var</span> mergedObj = &#123; <span class="params">...</span>obj1, <span class="params">...</span>obj2 &#125;;</span><br><span class="line"><span class="comment">// Object &#123; foo: "baz", x: 42, y: 13 &#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>请注意，<code>Object.assign()</code>会触发<code>setter</code>，而展开操作符则不会。</p>
+</li>
+</ul>
+<h3><span id="对象字面量表示法与json">对象字面量表示法与JSON</span></h3>
+<ul>
+<li>JSON 只允许<code>&quot;property&quot;: value syntax</code>形式的属性定义。属性名必须用双引号括起来。且属性定义不允许使用简便写法。</li>
+<li>JSON中，属性的值仅允许字符串，数字，数组，<code>true</code>，<code>false</code>，<code>null</code>或其他（JSON）对象。</li>
+<li>JSON中，不允许将值设置为函数。</li>
+<li><code>Date</code> 等对象，经<code>JSON.parse()</code>处理后，会变成字符串。</li>
+<li><code>JSON.parse()</code> 不会处理计算的属性名，会当做错误抛出。</li>
+</ul>
+<h3><span id="objectdefineproperty">Object.defineProperty()</span></h3>
+<ul>
+<li>
+<p><code>Object.defineProperty()</code> 方法会直接在一个对象上定义一个新属性，或者修改一个对象的现有属性， 并返回这个对象。</p>
+</li>
+<li>
+<p>语法</p>
+  <figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Object.defineProperty(obj, <span class="keyword">prop</span>, descriptor)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4><span id="属性描述符">属性描述符</span></h4>
+<ul>
+<li>
+<p>对象里目前存在的属性描述符有两种主要形式：数据描述符和存取描述符。数据描述符是一个具有值的属性，该值可能是可写的，也可能不是可写的。存取描述符是由getter-setter函数对描述的属性。描述符必须是这两种形式之一；不能同时是两者。</p>
+</li>
+<li>
+<p>数据描述符和存取描述符均具有以下可选键值：</p>
+<ul>
+<li><strong>configurable</strong>
+<ul>
+<li>当且仅当该属性的 configurable 为 true 时，该属性描述符才能够被改变，同时该属性也能从对应的对象上被删除。默认为 false。</li>
+</ul>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">var o = &#123;<span class="string">name:</span> <span class="string">"weite122"</span>&#125;</span><br><span class="line">Object.defineProperty(o, <span class="string">'name'</span>, &#123;<span class="string">writable:</span><span class="literal">false</span>&#125;)</span><br><span class="line"><span class="comment">//&#123;name: "weite122"&#125;</span></span><br><span class="line">o.name = <span class="string">"xxx"</span><span class="comment">// "xxx"</span></span><br><span class="line">o.name<span class="comment">// "weite122"</span></span><br><span class="line">Object.defineProperty(o, <span class="string">'name'</span>, &#123;<span class="string">writable:</span><span class="literal">true</span>&#125;)<span class="comment">//&#123;name: "weite122"&#125;</span></span><br><span class="line">o.name = <span class="string">"yyy"</span><span class="comment">//"yyy"</span></span><br><span class="line">o.name<span class="comment">//"yyy"</span></span><br><span class="line">Object.defineProperty(o, <span class="string">'name'</span>, &#123;<span class="string">writable:</span><span class="literal">false</span>,<span class="string">configurable:</span><span class="literal">false</span>&#125;)<span class="comment">//强制不可读</span></span><br><span class="line">Object.defineProperty(o, <span class="string">'name'</span>, &#123;<span class="string">writable:</span><span class="literal">true</span>&#125;)<span class="comment">//直接报错</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><strong>enumerable</strong>
+<ul>
+<li>当且仅当该属性的enumerable为true时，该属性才能够出现在对象的枚举属性中，即可以遍历。默认为 false。  <figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">var</span> <span class="built_in">array</span> = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line"><span class="keyword">for</span>(<span class="built_in">let</span> <span class="built_in">key</span> <span class="keyword">in</span> <span class="built_in">array</span>)&#123;console.<span class="built_in">log</span>(<span class="built_in">key</span>)&#125;// <span class="number">0</span> <span class="number">1</span> <span class="number">2</span></span><br><span class="line"><span class="built_in">array</span>['不想遍历的属性'] = '不想遍历的属性'</span><br><span class="line"><span class="keyword">for</span>(<span class="built_in">let</span> <span class="built_in">key</span> <span class="keyword">in</span> <span class="built_in">array</span>)&#123;console.<span class="built_in">log</span>(<span class="built_in">key</span>)&#125;// <span class="number">0</span> <span class="number">1</span> <span class="number">2</span> 不想遍历的属性</span><br><span class="line">Object.getOwnPropertyDescriptor(<span class="built_in">array</span>, <span class="string">"不想遍历的属性"</span>)</span><br><span class="line">//&#123;value: <span class="string">"不想遍历的属性"</span>, writable: <span class="literal">true</span>, enumerable: <span class="literal">true</span>, configurable: <span class="literal">true</span>&#125;</span><br><span class="line">Object.defineProperty(<span class="built_in">array</span>, <span class="string">"不想遍历的属性"</span>, &#123;writable:<span class="literal">false</span>,enumerable:<span class="literal">false</span>,configurable:<span class="literal">false</span>&#125;)</span><br><span class="line"><span class="keyword">for</span>(<span class="built_in">let</span> <span class="built_in">key</span> <span class="keyword">in</span> <span class="built_in">array</span>)&#123;console.<span class="built_in">log</span>(<span class="built_in">key</span>)&#125;// <span class="number">0</span> <span class="number">1</span> <span class="number">2</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>
+<p>数据描述符同时具有以下可选键值：</p>
+<ul>
+<li>
+<p><strong>value</strong></p>
+<ul>
+<li>该属性对应的值。可以是任何有效的 JavaScript 值（数值，对象，函数等）。默认为 undefined。</li>
+</ul>
+</li>
+<li>
+<p><strong>writable</strong></p>
+<ul>
+<li>当且仅当该属性的writable为true时，value才能被赋值运算符改变。默认为 false。</li>
+</ul>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> o = &#123;</span><br><span class="line">    <span class="function"><span class="keyword">get</span> <span class="title">name</span>(<span class="params"></span>)</span>&#123;<span class="keyword">return</span> <span class="string">'weite122'</span>&#125;</span><br><span class="line">&#125;</span><br><span class="line">Object.defineProperty(o, <span class="string">'name2'</span>, &#123;<span class="keyword">value</span>:<span class="string">'weite122'</span>,writable:<span class="literal">false</span>&#125;)</span><br><span class="line"><span class="comment">//name 和 name2 都是可读的变量，但name是通过set定义，name2是通过writable设置他可读性</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>
+<p>存取描述符同时具有以下可选键值：</p>
+<ul>
+<li><strong>get</strong>
+<ul>
+<li>一个给属性提供 getter 的方法，如果没有 getter 则为 undefined。当访问该属性时，该方法会被执行，方法执行时没有参数传入，但是会传入this对象（由于继承关系，这里的this并不一定是定义该属性的对象）。</li>
+<li>默认为 undefined。</li>
+</ul>
+</li>
+<li><strong>set</strong>
+<ul>
+<li>一个给属性提供 setter 的方法，如果没有 setter 则为 undefined。当属性值修改时，触发执行该方法。该方法将接受唯一参数，即该属性新的参数值。</li>
+<li>默认为 undefined。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3><span id="objectprototype__proto__"><code>Object.prototype.__proto__</code></span></h3>
+<ul>
+<li>通过现代浏览器的操作属性的便利性，可以改变一个对象的 [[Prototype]] 属性, 这种行为在每一个JavaScript引擎和浏览器中都是一个非常慢且影响性能的操作，使用这种方式来改变和继承属性是对性能影响非常严重的，并且性能消耗的时间也不是简单的花费在 obj.<strong>proto</strong> = … 语句上, 它还会影响到所有继承来自该 [[Prototype]] 的对象，如果你关心性能，你就不应该在一个对象中修改它的 [[Prototype]].。相反, 创建一个新的且可以继承 [[Prototype]] 的对象，推荐使用 Object.create()。</li>
+<li>当Object.prototype.<strong>proto</strong> 已被大多数浏览器厂商所支持的今天，其存在和确切行为仅在ECMAScript 2015规范中被标准化为传统功能，以确保Web浏览器的兼容性。为了更好的支持，建议只使用 Object.getPrototypeOf()。</li>
+</ul>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2019/01/09/ES6深入浅出之新版的类/" data-toggle="tooltip" data-placement="top" title="ES6深入浅出之新版的类">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2018/12/15/ES6深入浅出之迭代器与生成器/" data-toggle="tooltip" data-placement="top" title="ES6深入浅出之迭代器与生成器">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                    <div class="comment">
+                        <div id="disqus_thread" class="disqus-thread"></div>
+                    </div>
+                
+                <!-- disqus comment end -->
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#ES6" title="ES6">ES6</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="" target="_blank"></a></li>
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus embedded js code start (one page only need to embed once) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "your-disqus-ID";
+    var disqus_identifier = "http://yoursite.com/2019/01/01/ES6深入浅出之新版对象/";
+    var disqus_url = "http://yoursite.com/2019/01/01/ES6深入浅出之新版对象/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus embedded js code start end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'ℬ'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/weite122">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; weite122 2020 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    re-Ported by <a href="http://beantech.org">BeanTech</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=YenYuHsuan&repo=hexo-theme-beantech&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-XXXXXXXX-X';
+    var _gaDomain = 'yoursite';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
