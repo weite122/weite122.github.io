@@ -14,11 +14,11 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <title>
         
-          HTTP深入浅出之鉴权与安全 - weite122 | 涂涂的博客
+          Vue源码解析（一） - weite122 | 涂涂的博客
         
     </title>
 
-    <link rel="canonical" href="http://yoursite.com/2019/03/13/HTTP深入浅出之鉴权与安全/">
+    <link rel="canonical" href="http://yoursite.com/2019/07/01/Vue源码解析（一）/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -86,14 +86,14 @@
                     <div class="post-heading">
                         <div class="tags">
                             
-                              <a class="tag" href="/tags/#HTTP" title="HTTP">HTTP</a>
+                              <a class="tag" href="/tags/#vue" title="vue">vue</a>
                             
                         </div>
-                        <h1>HTTP深入浅出之鉴权与安全</h1>
+                        <h1>Vue源码解析（一）</h1>
                         <h2 class="subheading"></h2>
                         <span class="meta">
                             Posted by weite122 on
-                            2019-03-13
+                            2019-07-01
                         </span>
                     </div>
                 
@@ -210,172 +210,32 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <h3><span id="谈谈sessioncookie机制如何实现会话跟踪">谈谈Session/cookie机制，如何实现会话跟踪？</span></h3>
-<p><a href="https://www.cnblogs.com/andy-zhou/p/5360107.html#_caption_0" target="_blank" rel="noopener">https://www.cnblogs.com/andy-zhou/p/5360107.html#_caption_0</a></p>
-<h4><span id="cookie-理解">Cookie 理解</span></h4>
-<p>进公园</p>
-<p>背景: 这个公园有一个总公园, 总公园里有许多小公园(总公园是登录页面, 小公园是域名相同的页面)</p>
-<ol>
-<li>
-<p>第一次进总公园, (第一次请求某个服务器)</p>
-<p>工作人员检查你的入园是否符合条件(后端查看是否是注册以后的用户)</p>
-<p>通过条件的话工作人员会给你一张票(后端会给你一个响应头, 这个响应头的作用是设置一个 cookie )</p>
-<p>票的内容是只有工作人员才知道是否可以入园的字符串</p>
-</li>
-<li>
-<p>第二次进总公园(第二次请求相同的域名)</p>
-<p>你要带上这个票进公园(浏览器会在请求头带上cookie)</p>
-<p>工作人员看到这个票, 确认里面的内容正确就给你进去(后端看到这个cookie就会让你直接进入登录后的页面)</p>
-</li>
-</ol>
-<h4><span id="cookie-的实现">Cookie 的实现</span></h4>
-<ol>
-<li>服务器通过 Set-Cookie 头给客户端一串字符串(背)</li>
-<li>客户端每次访问相同域名的网页时，必须带上这段字符串(背)</li>
-<li>客户端要在一段时间内保存这个Cookie(背)</li>
-<li>Cookie 默认在用户关闭页面后就失效，后台代码可以任意设置 Cookie 的过期时间</li>
-<li>大小大概在 4kb 以内</li>
-</ol>
-<h4><span id="session的理解">Session的理解</span></h4>
-<p>进公园</p>
-<p>​	背景: 我是一个坏游客, 我知道什么样的字符串就可以进入公园, 于是我可以伪造假的门票, 工作人员发现了这个问题, 所以工作人员采用更安全的方法来审查门票</p>
-<ol>
-<li>
-<p>第一次进总公园, (第一次请求某个服务器)</p>
-<p>工作人员检查你的入园是否符合条件(后端查看是否是注册以后的用户)</p>
-<p>通过条件的话工作人员会给你一张票(后端会给你一个响应头, 这个响应头的作用是设置一个 cookie , cookie 的值是一个随机数)</p>
-<p>并且工作人员把票的字符串和你的名字写到一张表里(后端设置一个session, 保存在服务器内存中, session的内容是之前的随机数对应你的用户信息)</p>
-<p>票的内容是只有工作人员才知道是否可以入园的字符串</p>
-</li>
-<li>
-<p>第二次进总公园(第二次请求相同的域名)</p>
-<p>你要带上这个票进公园(浏览器会在请求头带上cookie)</p>
-<p>工作人员看到这个票, 通过判断票的字符串是否和表的字符串匹配, 如果匹配,那么说明可以进入(后端拿到请求内容的cookie的随机数, 会和sessions的内容进行比对, 看请求的cookie的随机数有没有在sessions上出现,如果出现了, 就会让你进入登录后的页面)</p>
-<p>比cookie多做两件事情(标了粗体)</p>
-<p>sessions其实就是服务器的一块内存, key:value, 分别是随机数和用户的信息</p>
-</li>
-</ol>
-<h4><span id="session的实现">Session的实现</span></h4>
-<ol>
-<li>
-<p>将 SessionID（随机数）通过 Cookie 发给客户端</p>
-</li>
-<li>
-<p>客户端访问服务器时，服务器读取 SessionID</p>
-</li>
-<li>
-<p>服务器有一块内存（哈希表）保存了所有 session</p>
-</li>
-<li>
-<p>通过 SessionID 我们可以得到对应用户的隐私信息，如 id、email</p>
-</li>
-<li>
-<p>这块内存（哈希表）就是服务器上的所有 session</p>
-</li>
-</ol>
-<h3><span id="web安全中有哪些常见的攻击方式">Web安全中有哪些常见的攻击方式？</span></h3>
-<h4><span id="xss">XSS</span></h4>
+                <h3><span id="为什么可以直接通过this-访问到data的值">为什么可以直接通过this 访问到data的值</span></h3>
 <ul>
-<li>
-<p><strong>概念</strong>：</p>
+<li>Vue 一开始会调用<code>_init</code>方法进行初始化</li>
+</ul>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">function Vue (options) &#123;</span><br><span class="line">  <span class="keyword">if</span> (process<span class="selector-class">.env</span><span class="selector-class">.NODE_ENV</span> !== <span class="string">'production'</span> &amp;&amp;  <span class="comment">// 非生产模式</span></span><br><span class="line">    !(this instanceof Vue)<span class="comment">// 判断 this 对象的 prototype 是否存在于构造函数 Vue 的原型链上</span></span><br><span class="line">  ) &#123;</span><br><span class="line">    warn(<span class="string">'Vue is a constructor and should be called with the `new` keyword'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  this._init(options) <span class="comment">//传入options</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">initMixin</span><span class="params">(Vue)</span></span></span><br><span class="line"><span class="function"><span class="title">stateMixin</span><span class="params">(Vue)</span></span></span><br><span class="line"><span class="function"><span class="title">eventsMixin</span><span class="params">(Vue)</span></span></span><br><span class="line"><span class="function"><span class="title">lifecycleMixin</span><span class="params">(Vue)</span></span></span><br><span class="line"><span class="function"><span class="title">renderMixin</span><span class="params">(Vue)</span></span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>XSS（Cross Site Scripting），即跨站脚本攻击，是一种常见于web应用程序中的计算机安全漏洞.XSS通过在用户端注入恶意的可运行脚本，若服务器端对用户输入不进行处理，直接将用户输入输出到浏览器，然后浏览器将会执行用户注入的脚本。</li>
+<li>在init.js文件中找到<code>initState</code>,跳转到<code>initState</code>函数定义，可以找到<code>initDate(vm)</code></li>
 </ul>
-</li>
-<li>
-<p><strong>举例</strong>：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">initState</span> <span class="params">(vm)</span> </span>&#123;</span><br><span class="line">  vm._watchers = [];</span><br><span class="line">  <span class="keyword">var</span> opts = vm.$options;</span><br><span class="line">  <span class="keyword">if</span> (opts.props) &#123; initProps(vm, opts.props); &#125;</span><br><span class="line">  <span class="keyword">if</span> (opts.methods) &#123; initMethods(vm, opts.methods); &#125;</span><br><span class="line">  <span class="keyword">if</span> (opts.data) &#123;</span><br><span class="line">    initData(vm);<span class="comment">//这里初始化Data</span></span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    observe(vm._data = &#123;&#125;, <span class="keyword">true</span> <span class="comment">/* asRootData */</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (opts.computed) &#123; initComputed(vm, opts.computed); &#125;</span><br><span class="line">  <span class="keyword">if</span> (opts.watch &amp;&amp; opts.watch !== nativeWatch) &#123;</span><br><span class="line">    initWatch(vm, opts.watch);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ul>
-<li>有一个input输入框，需要用户输入名字，用户却输入一个恶意脚本，<script>alert(document.cookie)</script>，</li>
+<li><code>initData</code> 的定义</li>
 </ul>
-<p>或者用户输入一个HTML，在标签中嵌入恶意脚本，如src，href，css style等。如：<code>&lt;IMG SRC=&quot;javascript:alert('XSS');&quot;&gt;; &lt;BODY BACKGROUND=&quot;javascript:alert('XSS')&quot;&gt;</code></p>
-</li>
-<li>
-<p><strong>防范</strong>：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">function</span> initData (vm) &#123;</span><br><span class="line">  var <span class="class"><span class="keyword">data</span> = vm.$options.<span class="keyword">data</span>; //获取到<span class="keyword">data</span>的值，vm就是一个<span class="type">Component</span>,在最开始的init赋予了this的值</span></span><br><span class="line">  <span class="class"><span class="keyword">data</span> = vm._data = typeof <span class="keyword">data</span> === 'function' //vm._data是一个私有变量，也可以通过this._data.xxx访问<span class="keyword">data</span>的值</span></span><br><span class="line">    ? getData(<span class="class"><span class="keyword">data</span>, vm) //判断<span class="keyword">data</span>是否为一个函数，vue在定义组件的时候，<span class="keyword">data</span>必须是一个函数</span></span><br><span class="line">    : <span class="class"><span class="keyword">data</span> || &#123;&#125;;</span></span><br><span class="line">  <span class="keyword">if</span> (!isPlainObject(<span class="class"><span class="keyword">data</span>)) &#123;</span></span><br><span class="line"><span class="class">    <span class="title">data</span> = &#123;&#125;;</span></span><br><span class="line">    warn(</span><br><span class="line">      '<span class="class"><span class="keyword">data</span> functions should return an object:\n' +</span></span><br><span class="line">      'https://vuejs.org/v2/guide/components.html#<span class="class"><span class="keyword">data</span>-<span class="type">Must</span>-<span class="type">Be</span>-a-<span class="type">Function'</span>,</span></span><br><span class="line">      vm</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">  // proxy <span class="class"><span class="keyword">data</span> on instance</span></span><br><span class="line">  var keys = <span class="type">Object</span>.keys(<span class="class"><span class="keyword">data</span>);</span></span><br><span class="line">  var props = vm.$options.props;</span><br><span class="line">  var methods = vm.$options.methods;</span><br><span class="line">  var i = keys.length;</span><br><span class="line">  while (i<span class="comment">--) &#123;</span></span><br><span class="line">    var key = keys[i];</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">if</span> (methods &amp;&amp; hasOwn(methods, key)) &#123;//函数名不能和<span class="class"><span class="keyword">data</span>的值冲突</span></span><br><span class="line">        warn(</span><br><span class="line">          (<span class="string">"Method \""</span> + key + <span class="string">"\" has already been defined as a data property."</span>),</span><br><span class="line">          vm</span><br><span class="line">        );</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (props &amp;&amp; hasOwn(props, key)) &#123;//在props上定义的值不能再<span class="class"><span class="keyword">data</span>定义，如果定义，会覆盖</span></span><br><span class="line">      warn(</span><br><span class="line">        <span class="string">"The data property \""</span> + key + <span class="string">"\" is already declared as a prop. "</span> +</span><br><span class="line">        <span class="string">"Use prop default value instead."</span>,</span><br><span class="line">        vm</span><br><span class="line">      );</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!isReserved(key)) &#123;</span><br><span class="line">      proxy(vm, <span class="string">"_data"</span>, key); //proxy是代理</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  // observe <span class="class"><span class="keyword">data</span></span></span><br><span class="line">  observe(<span class="class"><span class="keyword">data</span>, true /* asRootData */); //监听<span class="keyword">data</span>的值</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ul>
-<li>
-<p>其恶意脚本都是来自用户的输入。因此，可以使用过滤用户输入的方法对恶意脚本进行过滤。</p>
-<ol>
-<li>
-<p>获取用户输入，不用.innerHTML，用innerText。</p>
-</li>
-<li>
-<p>对用户输入进行过滤，如 HTMLEncode 函数实现应该至少进行 &amp; &lt; &gt; &quot; ’ / 等符号转义成 &amp;amp &amp;lt &amp;gt &amp;quot &amp;#x27 &amp;#x2F；</p>
-</li>
-</ol>
-</li>
+<li><code>proxy</code> 的定义</li>
 </ul>
-</li>
-</ul>
-<h4><span id="csrf">CSRF</span></h4>
-<ul>
-<li><strong>概念</strong>：
-<ul>
-<li>CSRF (Cross Site Request Forgery)攻击，中文名：跨站请求伪造。其原理是攻击者构造网站后台某个功能接口的请求地址，诱导用户去点击或者用特殊方法让该请求地址自动加载。用户在登录状态下这个请求被服务端接收后会被误以为是用户合法的操作。对于 GET 形式的接口地址可轻易被攻击，对于 POST 形式的接口地址也不是百分百安全，攻击者可诱导用户进入带 Form 表单可用POST方式提交参数的页面。</li>
-</ul>
-</li>
-<li><strong>防范</strong>：
-<ol>
-<li>服务端在收到路由请求时，生成一个随机数，在渲染请求页面时把随机数埋入页面（一般埋入 form 表单内，<input type="hidden" name="_csrf_token" value="xxxx">）</li>
-<li>服务端设置setCookie，把该随机数作为cookie或者session种入用户浏览器</li>
-<li>当用户发送 GET 或者 POST 请求时带上_csrf_token参数（对于 Form 表单直接提交即可，因为会自动把当前表单内所有的 input 提交给后台，包括_csrf_token）</li>
-<li>后台在接受到请求后解析请求的cookie获取_csrf_token的值，然后和用户请求提交的_csrf_token做个比较，如果相等表示请求是合法的。</li>
-<li>Token 保存在 Session 中。假如 Token 保存在 Cookie 中，用户浏览器开了很多页面。在一些页面 Token 被使用消耗掉后新的Token 会被重新种入，但那些老的 Tab 页面对应的 HTML 里还是老 Token。这会让用户觉得为啥几分钟前打开的页面不能正常提交？</li>
-<li>尽量少用 GET。假如攻击者在我们的网站上传了一张图片，用户在加载图片的时候实际上是向攻击者的服务器发送了请求，这个请求会带有referer表示当前图片所在的页面的 url。 而如果使用 GET 方式接口的话这个 URL 就形如：<br>
-<code>https://xxxx.com/gift?giftId=aabbcc&amp;_csrf_token=xxxxx</code>，<br>
-那相当于攻击者就获取了_csrf_token，短时间内可以使用这个 token 来操作其他 GET 接口。</li>
-</ol>
-</li>
-</ul>
-<h3><span id="常见的鉴权方式有哪些">常见的鉴权方式有哪些？</span></h3>
-<ol>
-<li>session/cookie 鉴权<br>
-<img src="https://i.loli.net/2019/03/27/5c9b9866357cc.jpg" alt="v2-b4c952a1f71313670b94898b2bea4f6a_r.jpg">
-<ul>
-<li>缺点：
-<ul>
-<li>小程序或其他APP没有cookie，不能用session鉴权</li>
-<li>session 对象需要存储在服务器内存，如果数据量大内存会溢出</li>
-<li>session需要建立一个数据库来存储，对于分布式的服务器，有可能会请求到了一台没有数据库的服务器</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>JWT鉴权<br>
-<img src="https://i.loli.net/2019/03/27/5c9b98660e386.jpg" alt="v2-e25cb900e0f30c5546a69f7a944a8085_r.jpg">
-<ul>
-<li>优点：
-<ul>
-<li>使用范围广</li>
-<li>服务器压力小</li>
-</ul>
-</li>
-<li>缺点：
-<ul>
-<li>用户注销，token并未注销，依然有效</li>
-<li>token有效期的需要设置，例如是2小时之内不用重新设置token，2小时到一天需要重新设置token，一天以上需要重新登录</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<ol start="3">
-<li>Auth2鉴权<br>
-<img src="https://i.loli.net/2019/03/27/5c9b9866252b2.jpg" alt="v2-e6660bb06127e350201f0875d5963f4b_r.jpg"></li>
-</ol>
-
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> sharedPropertyDefinition = &#123;</span><br><span class="line">  enumerable: <span class="literal">true</span>,<span class="comment">//可枚举</span></span><br><span class="line">  configurable: <span class="literal">true</span>,<span class="comment">//可配置</span></span><br><span class="line">  <span class="keyword">get</span>: noop,</span><br><span class="line">  <span class="keyword">set</span>: noop</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">proxy</span> <span class="params">(target, sourceKey, key)</span> </span>&#123; <span class="comment">//调用时参数为 &#123;vm, "_data", key&#125;</span></span><br><span class="line">  sharedPropertyDefinition.get = <span class="function"><span class="keyword">function</span> <span class="title">proxyGetter</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>[sourceKey][key]</span><br><span class="line">  &#125;;</span><br><span class="line">  sharedPropertyDefinition.set = <span class="function"><span class="keyword">function</span> <span class="title">proxySetter</span> <span class="params">(val)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>[sourceKey][key] = val;</span><br><span class="line">  &#125;;</span><br><span class="line">  Object.defineProperty(target, key, sharedPropertyDefinition); <span class="comment">//在vm上添加key属性，比如访问vm.message即访问this._data.message， vm就是this的值</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
                 
 
                 <hr>
                 <!-- Pager -->
                 <ul class="pager">
                     
-                        <li class="previous">
-                            <a href="/2019/03/14/HTTP深入浅出之HTTP性能与服务器推送/" data-toggle="tooltip" data-placement="top" title="HTTP深入浅出之HTTP性能与服务器推送">&larr; Previous Post</a>
-                        </li>
-                    
                     
                         <li class="next">
-                            <a href="/2019/03/13/HTTP深入浅出之HTTPS原理以及握手细节/" data-toggle="tooltip" data-placement="top" title="HTTP深入浅出之HTTPS原理以及握手细节">Next Post &rarr;</a>
+                            <a href="/2019/03/14/HTTP深入浅出之HTTP性能与服务器推送/" data-toggle="tooltip" data-placement="top" title="HTTP深入浅出之HTTP性能与服务器推送">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -405,7 +265,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#null"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">谈谈Session/cookie机制，如何实现会话跟踪？</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#null"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">Cookie 理解</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#null"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">Cookie 的实现</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#null"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">Session的理解</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#null"><span class="toc-nav-number">1.4.</span> <span class="toc-nav-text">Session的实现</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#null"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">Web安全中有哪些常见的攻击方式？</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#null"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">XSS</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#null"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">CSRF</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#null"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">常见的鉴权方式有哪些？</span></a></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#null"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">为什么可以直接通过this 访问到data的值</span></a></li></ol>
         
         </div>
       </aside>
@@ -425,7 +285,7 @@
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
                        
-                          <a class="tag" href="/tags/#HTTP" title="HTTP">HTTP</a>
+                          <a class="tag" href="/tags/#vue" title="vue">vue</a>
                         
                     </div>
                 </section>
@@ -454,8 +314,8 @@
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
     var disqus_shortname = "your-disqus-ID";
-    var disqus_identifier = "http://yoursite.com/2019/03/13/HTTP深入浅出之鉴权与安全/";
-    var disqus_url = "http://yoursite.com/2019/03/13/HTTP深入浅出之鉴权与安全/";
+    var disqus_identifier = "http://yoursite.com/2019/07/01/Vue源码解析（一）/";
+    var disqus_url = "http://yoursite.com/2019/07/01/Vue源码解析（一）/";
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

@@ -132,14 +132,14 @@
 
                         
                         <li>
-                            <a href="/about/">About</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/about/">About</a>
                         </li>
                         
                     
@@ -206,6 +206,37 @@
             
                 <!-- Main Content -->
 
+
+<div class="post-preview">
+
+    <a href="/2018/09/22/Vue学习笔记（十九）/">
+        <h2 class="post-title">
+            Vue学习笔记（十九）之Vue中多个元素或组件的过渡
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            多个元素的过渡
+
+对于原生标签可以使用 v-if/v-else 。需要注意的是当有相同标签名的元素切换时，需要通过 key 特性设置唯一的值来标记以让 Vue 区分它们，否则 Vue 为了效率只会替换相同标签内部的内容。即使在技术上没有必要，给在 &lt;transition&gt; 组件中的多个元素设置 key 是一个更好的实践。
+在多个元素同时进入和离开过渡的时候，动画会混乱，可以用过渡......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by weite122 on
+            2018-09-22
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#vue" title="vue">vue</a>
+            
+        </div>
+    
+
+</div>
+<hr>
 
 <div class="post-preview">
 
@@ -519,38 +550,6 @@ Vue 提供了 transition 的......
 </div>
 <hr>
 
-<div class="post-preview">
-
-    <a href="/2018/08/27/Vue学习笔记（九）/">
-        <h2 class="post-title">
-            Vue学习笔记（九）之组件中使用的细节点
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            解析 DOM 模板时的注意事项
-
-有些 HTML 元素，诸如 &lt;ul&gt;、&lt;ol&gt;、&lt;table&gt; 和 &lt;select&gt;，对于哪些元素可以出现在其内部是有严格限制的。而有些元素，诸如 &lt;li&gt;、&lt;tr&gt; 和 &lt;option&gt;，只能出现在其它某些特定的元素内部。我们可以通过is特性解决这个问题。
-效果
-代码：12......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by weite122 on
-            2018-08-27
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#vue" title="vue">vue</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
 
 
 <!-- Pager -->
@@ -603,7 +602,9 @@ Vue 提供了 transition 的......
             
         
             
-            <a href="/tags/#vue" title="vue" rel="19">vue</a>
+            <a href="/tags/#vue" title="vue" rel="20">vue</a>
+            
+        
             
         
             
@@ -612,8 +613,6 @@ Vue 提供了 transition 的......
         
             
             <a href="/tags/#CSS" title="CSS" rel="3">CSS</a>
-            
-        
             
         
             
@@ -674,6 +673,10 @@ Vue 提供了 transition 的......
     <ul>
       
         <li>
+          <a href="/2019/07/01/Vue源码解析（一）/">Vue源码解析（一）</a>
+        </li>
+      
+        <li>
           <a href="/2019/03/14/HTTP深入浅出之HTTP性能与服务器推送/">HTTP深入浅出之HTTP性能与服务器推送</a>
         </li>
       
@@ -687,10 +690,6 @@ Vue 提供了 transition 的......
       
         <li>
           <a href="/2019/03/08/HTTP深入浅出之缓存/">HTTP深入浅出之缓存</a>
-        </li>
-      
-        <li>
-          <a href="/2019/03/03/HTTP深入浅出之报文与状态码/">HTTP深入浅出之报文与状态码</a>
         </li>
       
     </ul>
