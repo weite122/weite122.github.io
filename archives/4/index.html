@@ -209,6 +209,40 @@
 
 <div class="post-preview">
 
+    <a href="/2018/08/29/Vue学习笔记（十）/">
+        <h2 class="post-title">
+            Vue学习笔记（十）之父子组件通信
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            单向数据流
+
+
+所有的 prop 都使得其父子 prop 之间形成了一个单向下行绑定：父级 prop 的更新会向下流动到子组件中，但是反过来则不行。这样会防止从子组件意外改变父级组件的状态，从而导致你的应用的数据流向难以理解。
+
+
+额外的，每次父级组件发生更新时，子组件中所有的 prop 都将会刷新为最新的值。这意味着你不应该在一个子组件内部改变 prop。如果你这样做了，Vue 会在浏览器......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by weite122 on
+            2018-08-29
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#vue" title="vue">vue</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
     <a href="/2018/08/27/Vue学习笔记（九）/">
         <h2 class="post-title">
             Vue学习笔记（九）之组件中使用的细节点
@@ -527,42 +561,6 @@ Vue (读音 /vjuː/，类似于 view) 是一套用于构建用户界面的渐进
 </div>
 <hr>
 
-<div class="post-preview">
-
-    <a href="/2018/03/07/HTTP知识总结/">
-        <h2 class="post-title">
-            HTTP知识总结
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            OSI 七层模型指什么?
-
-OSI模型是开放式系统互联通信参考模型（英语：Open System Interconnection Reference Model，缩写为 OSI），简称为OSI模型（OSI model），它定义了网络互联的7层框架，也就是开放式系统互联参考模型。
-
-
-
-第1层 物理层(Physical Layer)
-
-在局部局域网上传送帧，它负责管理电脑通信设备和网络媒体之间......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by weite122 on
-            2018-03-07
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#HTTP" title="HTTP">HTTP</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
 
 
 <!-- Pager -->
@@ -634,6 +632,8 @@ OSI模型是开放式系统互联通信参考模型（英语：Open System Inter
         
             
         
+            
+        
     </div>
 </section>
 
@@ -686,6 +686,10 @@ OSI模型是开放式系统互联通信参考模型（英语：Open System Inter
     <ul>
       
         <li>
+          <a href="/2020/08/25/函数防抖和函数节流/">函数防抖和函数节流</a>
+        </li>
+      
+        <li>
           <a href="/2019/07/01/Vue源码解析（一）/">Vue源码解析（一）</a>
         </li>
       
@@ -699,10 +703,6 @@ OSI模型是开放式系统互联通信参考模型（英语：Open System Inter
       
         <li>
           <a href="/2019/03/13/HTTP深入浅出之HTTPS原理以及握手细节/">HTTP深入浅出之HTTPS原理以及握手细节</a>
-        </li>
-      
-        <li>
-          <a href="/2019/03/08/HTTP深入浅出之缓存/">HTTP深入浅出之缓存</a>
         </li>
       
     </ul>

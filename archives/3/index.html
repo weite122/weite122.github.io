@@ -209,6 +209,39 @@
 
 <div class="post-preview">
 
+    <a href="/2018/11/09/ES6深入浅出之let和const/">
+        <h2 class="post-title">
+            ES6深入浅出之let和const
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            let 命令用法
+1. let不存在变量提升
+12console.log(a); //ReferenceError: a is not definedlet a = 1;
+2. let的作用域在最近的{}之间
+1234&#123;    let a = 1 &#125;console.log(a) //ReferenceError: a is not defined
+3. let不允许重复声......
+        </div>
+    </a>
+    
+        <p class="post-meta" style="margin: 10px 0;">
+            Posted by weite122 on
+            2018-11-09
+        </p>
+        <div class="tags">
+            
+              <a href="/tags/#ES6" title="ES6">ES6</a>
+            
+        </div>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
     <a href="/2018/09/22/Vue学习笔记（十九）/">
         <h2 class="post-title">
             Vue学习笔记（十九）之Vue中多个元素或组件的过渡
@@ -516,40 +549,6 @@ Vue 提供了 transition 的......
 </div>
 <hr>
 
-<div class="post-preview">
-
-    <a href="/2018/08/29/Vue学习笔记（十）/">
-        <h2 class="post-title">
-            Vue学习笔记（十）之父子组件通信
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            单向数据流
-
-
-所有的 prop 都使得其父子 prop 之间形成了一个单向下行绑定：父级 prop 的更新会向下流动到子组件中，但是反过来则不行。这样会防止从子组件意外改变父级组件的状态，从而导致你的应用的数据流向难以理解。
-
-
-额外的，每次父级组件发生更新时，子组件中所有的 prop 都将会刷新为最新的值。这意味着你不应该在一个子组件内部改变 prop。如果你这样做了，Vue 会在浏览器......
-        </div>
-    </a>
-    
-        <p class="post-meta" style="margin: 10px 0;">
-            Posted by weite122 on
-            2018-08-29
-        </p>
-        <div class="tags">
-            
-              <a href="/tags/#vue" title="vue">vue</a>
-            
-        </div>
-    
-
-</div>
-<hr>
-
 
 
 <!-- Pager -->
@@ -621,6 +620,8 @@ Vue 提供了 transition 的......
         
             
         
+            
+        
     </div>
 </section>
 
@@ -673,6 +674,10 @@ Vue 提供了 transition 的......
     <ul>
       
         <li>
+          <a href="/2020/08/25/函数防抖和函数节流/">函数防抖和函数节流</a>
+        </li>
+      
+        <li>
           <a href="/2019/07/01/Vue源码解析（一）/">Vue源码解析（一）</a>
         </li>
       
@@ -686,10 +691,6 @@ Vue 提供了 transition 的......
       
         <li>
           <a href="/2019/03/13/HTTP深入浅出之HTTPS原理以及握手细节/">HTTP深入浅出之HTTPS原理以及握手细节</a>
-        </li>
-      
-        <li>
-          <a href="/2019/03/08/HTTP深入浅出之缓存/">HTTP深入浅出之缓存</a>
         </li>
       
     </ul>
